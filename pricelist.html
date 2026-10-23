@@ -1,1 +1,340 @@
-hello
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reputasi — WANG STORE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            padding: 30px 20px;
+            color: #fff;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(255, 215, 0, 0.15), transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(255, 0, 128, 0.15), transparent 50%),
+                linear-gradient(180deg, #05071a 0%, #0b102b 50%, #05071a 100%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 35px 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.25);
+            backdrop-filter: blur(10px);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #aaa;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        .rating-summary {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .rating-score {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffd700;
+        }
+
+        .stars {
+            font-size: 1.5rem;
+            color: #ffd700;
+        }
+
+        .total-reviews {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        /* FORM ULASAN */
+        .form-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(37, 211, 102, 0.25);
+            padding: 25px;
+            margin-bottom: 35px;
+        }
+
+        .form-section h2 {
+            color: #25D366;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        input, textarea, select, button {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-size: 0.95rem;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #777;
+        }
+
+        button {
+            background: linear-gradient(90deg, #ffd700, #ffaa00);
+            color: #000;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+        }
+
+        /* DAFTAR ULASAN */
+        .reviews-section h2 {
+            color: #ffd700;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .review-card {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 18px 20px;
+            margin-bottom: 15px;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .review-name {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .review-stars {
+            color: #ffd700;
+            font-size: 0.9rem;
+        }
+
+        .review-date {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .review-text {
+            color: #ccc;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .success-msg {
+            background: rgba(37, 211, 102, 0.1);
+            border: 1px solid rgba(37, 211, 102, 0.3);
+            color: #25D366;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏪 WANG STORE — REPUTASI</h1>
+            <p class="subtitle">Lihat ulasan dari pelanggan kami yang sudah percaya</p>
+            
+            <div class="rating-summary">
+                <div class="rating-score" id="avgRating">4.9</div>
+                <div>
+                    <div class="stars" id="starsDisplay">★★★★★</div>
+                    <div class="total-reviews"><span id="totalCount">0</span> ulasan</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- FORM KIRIM ULASAN -->
+        <div class="form-section">
+            <h2>✍️ Kirim Ulasan Kamu</h2>
+            <div class="success-msg" id="successMsg">✅ Terima kasih! Ulasan kamu sudah terkirim</div>
+            
+            <form id="reviewForm">
+                <input type="text" id="nameInput" placeholder="Nama / Username Roblox" required>
+                <select id="starInput" required>
+                    <option value="">— Beri Penilaian —</option>
+                    <option value="5">★★★★★ — Sangat Memuaskan</option>
+                    <option value="4">★★★★ — Bagus</option>
+                    <option value="3">★★★ — Cukup</option>
+                    <option value="2">★★ — Kurang</option>
+                    <option value="1">★ — Buruk</option>
+                </select>
+                <textarea id="reviewInput" rows="4" placeholder="Ceritakan pengalaman kamu berbelanja di sini..." required></textarea>
+                <button type="submit">📤 Kirim Ulasan</button>
+            </form>
+        </div>
+
+        <!-- DAFTAR ULASAN -->
+        <div class="reviews-section">
+            <h2>📋 Semua Ulasan</h2>
+            <div id="reviewsList">
+                <div class="empty-state">
+                    Belum ada ulasan. Jadilah yang pertama mengirim ulasan!
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>🏪 WANG STORE — Terpercaya &amp; Tercepat</p>
+            <p>⚠️ Ulasan disimpan secara lokal di browser</p>
+        </footer>
+    </div>
+
+    <script>
+        const reviewsList = document.getElementById('reviewsList');
+        const reviewForm = document.getElementById('reviewForm');
+        const successMsg = document.getElementById('successMsg');
+        const totalCount = document.getElementById('totalCount');
+        const avgRating = document.getElementById('avgRating');
+        const starsDisplay = document.getElementById('starsDisplay');
+
+        // Ambil data ulasan dari penyimpanan browser
+        let reviews = JSON.parse(localStorage.getItem('wangstore_reviews')) || [];
+
+        // Tampilkan ulasan yang tersimpan
+        function renderReviews() {
+            if (reviews.length === 0) {
+                reviewsList.innerHTML = `<div class="empty-state">Belum ada ulasan. Jadilah yang pertama mengirim ulasan!</div>`;
+                totalCount.textContent = '0';
+                avgRating.textContent = '4.9';
+                starsDisplay.textContent = '★★★★★';
+                return;
+            }
+
+            // Urutkan dari yang terbaru di atas
+            reviews.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            // Hitung rata-rata
+            const total = reviews.reduce((sum, r) => sum + r.stars, 0);
+            const avg = (total / reviews.length).toFixed(1);
+            totalCount.textContent = reviews.length;
+            avgRating.textContent = avg;
+            
+            // Tampilkan bintang rata-rata
+            const fullStars = Math.round(avg);
+            starsDisplay.textContent = '★'.repeat(fullStars) + '☆'.repeat(5 - fullStars);
+
+            // Render daftar ulasan
+            reviewsList.innerHTML = reviews.map(r => `
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-name">${escapeHtml(r.name)}</div>
+                        <div class="review-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5 - r.stars)}</div>
+                    </div>
+                    <div class="review-date">${formatDate(r.date)}</div>
+                    <div class="review-text">${escapeHtml(r.text)}</div>
+                </div>
+            `).join('');
+        }
+
+        // Kirim ulasan baru
+        reviewForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('nameInput').value.trim();
+            const stars = parseInt(document.getElementById('starInput').value);
+            const text = document.getElementById('reviewInput').value.trim();
+
+            const newReview = {
+                id: Date.now(),
+                name: name,
+                stars: stars,
+                text: text,
+                date: new Date().toISOString()
+            };
+
+            reviews.push(newReview);
+            localStorage.setItem('wangstore_reviews', JSON.stringify(reviews));
+            
+            // Tampilkan pesan sukses
+            successMsg.style.display = 'block';
+            reviewForm.reset();
+            renderReviews();
+            
+            // Sembunyikan pesan sukses setelah 3 detik
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+            }, 3000);
+        });
+
+        // Fungsi bantu
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatDate(dateStr) {
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('id-ID', { 
+                day: 'numeric', 
+                month: 'long', 
+                year: 'numeric' 
+            });
+        }
+
+        // Inisialisasi saat halaman dibuka
+        renderReviews();
+    </script>
+</body>
+  </html>
+  
